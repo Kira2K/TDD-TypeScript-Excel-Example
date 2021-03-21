@@ -20,6 +20,7 @@ export module ExcelDataFilter {
   export type getFilteredExcelDataArg = {
     chosenHeaders: HeadersInterface[];
     headersArr: HeadersInterface[];
+    skipRowsQuantity: number;
   };
 
   export type deleteDeclinedRowsByHeadersArg = {
@@ -52,7 +53,7 @@ export class ExcelDataFilter {
     args: ExcelDataFilter.getFilteredExcelDataArg
   ): Promise<any[]> {
     try {
-      const { chosenHeaders, headersArr } = args;
+      const { chosenHeaders, headersArr, skipRowsQuantity } = args;
       const context = await Excel.run<Excel.RequestContext>(
         async (context: Excel.RequestContext) => context
       );
@@ -69,6 +70,7 @@ export class ExcelDataFilter {
         values,
         headerRowNamesToReplaceHeaderRow: headersArrNames,
         declinedHeadersColumnValuesArr: headersArr,
+        skipRowsQuantity,
       });
       const clearedValuesByHeaders = this.deleteDeclinedRowsByHeaders({
         clearedValuesByColumns,
